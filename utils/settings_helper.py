@@ -6,6 +6,8 @@ class Settings:
     def __init__(self) -> None:
         if os.path.exists(Settings.SETTINGS_PATH):
             self.settings = json.load(open(Settings.SETTINGS_PATH, 'r'))
+        else:
+            self.settings = {}
 
     def get(self, key) -> str:
         if key not in self.settings:

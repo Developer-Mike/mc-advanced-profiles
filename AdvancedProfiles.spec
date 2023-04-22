@@ -33,6 +33,7 @@ main_exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['icon.ico'],
 )
 
 interferer_block_cipher = None
@@ -68,6 +69,7 @@ interferer_exe = EXE(
     target_arch=None,
     codesign_identity=None,
     entitlements_file=None,
+    icon=['icon-interferer.ico'],
 )
 
 coll = COLLECT(
