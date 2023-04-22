@@ -1,14 +1,11 @@
 import os, json
 
-DEBUG = True
-
 class Settings:
-    SETTINGS_RELATIVE_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), 'settings.json') \
-        if not DEBUG else \
-            os.path.join(os.path.dirname(os.path.dirname(os.path.dirname(os.path.dirname(__file__)))), 'settings.json')
+    SETTINGS_PATH = os.path.join(os.path.dirname(__file__), "config", "settings.json")
 
     def __init__(self) -> None:
-        self.settings = json.load(open(Settings.SETTINGS_RELATIVE_PATH, 'r'))
+        if os.path.exists(Settings.SETTINGS_PATH):
+            self.settings = json.load(open(Settings.SETTINGS_PATH, 'r'))
 
     def get(self, key) -> str:
         if key not in self.settings:

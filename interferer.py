@@ -1,4 +1,4 @@
-import os, sys, subprocess
+import sys, subprocess
 from utils.settings_helper import Settings
 
 arguments = sys.argv[1:]
