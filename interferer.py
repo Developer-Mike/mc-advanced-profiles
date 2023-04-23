@@ -1,5 +1,5 @@
 import sys, subprocess
-from utils.settings_helper import Settings
+from utils.settings_helper import SettingsHelper
 
 arguments = sys.argv[1:]
 
@@ -10,7 +10,7 @@ print("Profile ID: " + profile_id)
 # TODO: Modify folders
 
 # Can't use os.getenv("JAVA_HOME")
-settings = Settings()
+settings = SettingsHelper()
 java_path = settings.get("java_path")
 print("Java path: " + java_path)
 

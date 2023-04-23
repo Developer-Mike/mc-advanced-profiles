@@ -1,10 +1,11 @@
 import os
-from mod import Mod
+from utils.mod import Mod
 from typing import List
 
 class AdvancedProfileHelper:
-    ADVANCED_PROFILES_PATH = os.path.join(os.path.dirname(__file__), "config", "profiles")
-    DEFAULT_PROFILE_PATH = os.path.join(os.path.dirname(__file__), "config", "default_profile")
+    _ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
+    ADVANCED_PROFILES_PATH = os.path.join(_ROOT_PATH, "config", "profiles")
+    DEFAULT_PROFILE_PATH = os.path.join(_ROOT_PATH, "config", "default_profile")
     
     def get_profile_mods(self, profile_id: str) -> List[Mod]:
         profile_path = os.path.join(AdvancedProfileHelper.ADVANCED_PROFILES_PATH, profile_id, "mods")
