@@ -5,7 +5,7 @@ ctk.set_appearance_mode("System")
 ctk.set_default_color_theme("blue")
 
 app = App()
-app.geometry("400x240")
+app.geometry("1000x550")
 
 app.mainloop()
 

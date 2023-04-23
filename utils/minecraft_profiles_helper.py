@@ -1,4 +1,6 @@
 import json, os
+from PIL import Image
+from io import BytesIO
 from typing import List
 
 PROFILE_ID_PREFIX = "multiprofile-"
@@ -9,6 +11,10 @@ class MCProfile:
         self.profile_icon = profile_icon
         self.profile_name = profile_name
         self.version_id = version_id
+
+    def get_icon(self) -> Image:
+        if self.profile_icon is None: return None
+        else: return Image.open(BytesIO(self.profile_icon))
 
 class MCProfileHelper:
     LAUNCHER_PROFILES_RELATIVE_PATH = "launcher_profiles.json"

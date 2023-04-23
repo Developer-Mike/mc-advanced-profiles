@@ -5,7 +5,10 @@ main = Analysis(
     ['main.py'],
     pathex=[],
     binaries=[],
-    datas=[("d:/programme/wpy64-3830/python-3.8.3.amd64/lib/site-packages/customtkinter", "customtkinter/")], # Change this to your customtkinter path
+    datas=[
+        ("d:/programme/wpy64-3830/python-3.8.3.amd64/lib/site-packages/customtkinter", "customtkinter/"), # Change this to your customtkinter path
+        ("assets", "assets/")
+    ],
     hiddenimports=[],
     hookspath=[],
     hooksconfig={},
