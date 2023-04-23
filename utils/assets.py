@@ -15,4 +15,7 @@ def invert(image):
 PLUS_ICON_BLACK = Image.open(os.path.join(_ROOT_DIR, "plus.png")).convert("RGBA")
 PLUS_ICON_WHITE = invert(PLUS_ICON_BLACK)
 
+DELETE_ICON_BLACK = Image.open(os.path.join(_ROOT_DIR, "delete.png")).convert("RGBA")
+DELETE_ICON_WHITE = invert(DELETE_ICON_BLACK)
+
     
