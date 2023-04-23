@@ -88,3 +88,7 @@ coll = COLLECT(
     upx_exclude=[],
     name='AdvancedProfiles',
 )
+
+# Debug
+import shutil
+shutil.copytree("config", "dist/AdvancedProfiles/config")
