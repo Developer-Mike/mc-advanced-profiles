@@ -1,6 +1,6 @@
 import tkinter as tk
 import customtkinter as ctk
-from utils.custom_widgets import ImageButton
+from ui.components.image_button import ImageButton
 from utils.assets import PLUS_ICON_WHITE
 
 class PageProfilesList(ctk.CTkFrame):
@@ -15,3 +15,8 @@ class PageProfilesList(ctk.CTkFrame):
 
     def _create_profile(self):
         self.app.navigate(self.app.pages[1])
+
+    def update(self) -> None:
+        # TODO: Update the profiles list
+
+        return super().update()

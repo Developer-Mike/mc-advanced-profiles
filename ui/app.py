@@ -11,7 +11,7 @@ class App(ctk.CTk):
     def __init__(self):
         super().__init__()
         self.title("Advanced Profiles")
-        self.iconbitmap(os.path.join(self._ROOT_DIR, "icons", "icon.ico"))
+        self.iconbitmap(os.path.join(self._ROOT_DIR, "assets", "icon.ico"))
 
         self.pages = [
             PageProfilesList(self),
