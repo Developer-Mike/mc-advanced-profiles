@@ -1,7 +1,7 @@
 import tkinter as tk
 import customtkinter as ctk
 from ui.components.image_button import ImageButton
-from ui.components.profiles_list import ProfilesList
+from ui.components.page_profiles_list.profiles_list import ProfilesList
 from utils.assets import PLUS_ICON_WHITE
 
 from typing import TYPE_CHECKING
@@ -10,10 +10,10 @@ if TYPE_CHECKING:
 
 class PageProfilesList(ctk.CTkFrame):
     def __init__(self, app: "App"):
-        super().__init__(app)
+        super().__init__(app, fg_color="transparent")
         self.app = app
 
-        fv_content = ctk.CTkScrollableFrame(self)
+        fv_content = ctk.CTkScrollableFrame(self, fg_color="transparent")
 
         lb_title = ctk.CTkLabel(fv_content, text="Profiles", font=("Arial", 30, "bold"))
         lb_title.pack(side=tk.TOP, anchor="nw", padx=40, pady=40)

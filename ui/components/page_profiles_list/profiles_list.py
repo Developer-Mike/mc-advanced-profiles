@@ -1,25 +1,11 @@
 import customtkinter as ctk
 import tkinter as tk
 
-from typing import TYPE_CHECKING
+from ui.components.page_profiles_list.profile_view import ProfileView
 
-from ui.components.image_view import ImageView
+from typing import TYPE_CHECKING
 if TYPE_CHECKING:
     from ui.app import App
-    from utils.minecraft_profiles_helper import MCProfile
-
-class ProfileView(ctk.CTkFrame):
-    def __init__(self, app: "App", root, profile: "MCProfile"):
-        super().__init__(root)
-        self.app = app
-        self.root = root
-        self.profile = profile
-
-        lb_icon = ImageView(self, profile.get_icon(), size=(75, 75))
-        lb_icon.pack(side=tk.LEFT, anchor="nw", padx=10, pady=10)
-
-        lb_name = ctk.CTkLabel(self, text=profile.profile_name, font=("Arial", 20, "bold"))
-        lb_name.pack(side=tk.LEFT, anchor="nw", padx=10, pady=10)
 
 class ProfilesList(ctk.CTkFrame):
     def __init__(self, app: "App", root):
