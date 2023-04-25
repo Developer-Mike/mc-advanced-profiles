@@ -8,8 +8,8 @@ class AdvancedProfileHelper:
     DEFAULT_PROFILE_PATH = os.path.join(_ROOT_PATH, "config", "default_profile")
 
     def _get_profile_path(self, profile_id: str) -> str:
-        if profile_id is not None: os.path.join(AdvancedProfileHelper.ADVANCED_PROFILES_PATH, profile_id)
-        else: os.path.join(AdvancedProfileHelper.DEFAULT_PROFILE_PATH)
+        if profile_id is not None: return os.path.join(AdvancedProfileHelper.ADVANCED_PROFILES_PATH, profile_id)
+        else: return os.path.join(AdvancedProfileHelper.DEFAULT_PROFILE_PATH)
 
     def _get_default_config(self) -> dict:
         return {
@@ -53,12 +53,12 @@ class AdvancedProfileHelper:
         if mod_paths is None: return None
         else: return [Mod(mod_path) for mod_path in mod_paths]
 
-    def set_profile_server(self, profile_id: str, server: str):
-        self._modify_profile_config(profile_id, "server", server)
+    def set_profile_quickplay_server(self, profile_id: str, server: str):
+        self._modify_profile_config(profile_id, "direct_play_server", server)
 
-    def get_profile_server(self, profile_id: str) -> str:
+    def get_profile_quickplay_server(self, profile_id: str) -> str:
         profile_config = self._get_profile_config(profile_id)
-        return profile_config["server"]
+        return profile_config["direct_play_server"]
     
     def set_profile_resource_packs(self, profile_id: str, resource_packs: List[str]):
         self._modify_profile_config(profile_id, "resource_packs", resource_packs)
@@ -84,11 +84,11 @@ class AdvancedProfileHelper:
                 break
 
         with open(options_txt_path, "w") as f:
-            f.write(options_txt.join(""))
+            f.write("".join(options_txt))
 
         return old_resource_packs
 
-    def initialize_profile(self, profile_id: str, mc_path: str):
+    def initialize_profile(self, mc_path: str, profile_id: str):
         if profile_id is None: return
         profile_path = self._get_profile_path(profile_id)
         if not os.path.exists(profile_path): return

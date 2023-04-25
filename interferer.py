@@ -10,17 +10,19 @@ profile_id = arguments.pop(profile_id_index)
 print("Profile ID: " + profile_id)
 
 # Init profile
+settings = SettingsHelper()
 advanced_profiles_helper = AdvancedProfileHelper()
-advanced_profiles_helper.initialize_profile(profile_id)
+
+minecraft_path = settings.get("minecraft_path")
+advanced_profiles_helper.initialize_profile(minecraft_path, profile_id)
 
 # Add direct play to arguments
-quickplay_server = advanced_profiles_helper.get_profile_server(profile_id)
+quickplay_server = advanced_profiles_helper.get_profile_quickplay_server(profile_id)
 if quickplay_server is not None:
     arguments.append("--quickPlayMultiplayer")
     arguments.append(f'"{quickplay_server}"')
 
 # Can't use os.getenv("JAVA_HOME")
-settings = SettingsHelper()
 java_path = settings.get("java_path")
 print("Java path: " + java_path)
 
@@ -29,5 +31,5 @@ process = subprocess.run(["java", *arguments], executable=java_path)
 print("Minecraft exited with code: " + str(process.returncode))
 
 # Restore folders
-advanced_profiles_helper.restore_default_profile()
+advanced_profiles_helper.restore_default_profile(minecraft_path)
 print("Restored old state of folders")
