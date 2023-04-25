@@ -9,15 +9,3 @@ app.geometry("1000x550")
 app.minsize(1000, 550)
 
 app.mainloop()
-
-'''
-from utils.settings_helper import SettingsHelper
-from utils.minecraft_profiles_helper import MCProfileHelper
-from utils.advanced_profiles_helper import AdvancedProfileHelper
-
-settings_helper = SettingsHelper()
-minecraft_path = settings_helper.get("minecraft_path")
-
-profiles_helper = MCProfileHelper(minecraft_path)
-advanced_profiles_helper = AdvancedProfileHelper()
-'''

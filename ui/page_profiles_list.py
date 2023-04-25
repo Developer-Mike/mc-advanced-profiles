@@ -19,7 +19,7 @@ class PageProfilesList(ctk.CTkFrame):
         lb_title.pack(side=tk.TOP, anchor="nw", padx=40, pady=40)
         
         self.fv_profiles = ProfilesList(self.app, fv_content)
-        self.fv_profiles.pack(side=tk.TOP, fill="both", expand=True, padx=40)
+        self.fv_profiles.pack(side=tk.TOP, fill="both", expand=True, padx=40, pady=(0, 50))
 
         fv_content.pack(side=tk.TOP, fill="both", expand=True)
 

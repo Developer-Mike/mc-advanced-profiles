@@ -1,7 +1,7 @@
 import customtkinter as ctk
 import tkinter as tk
 
-from utils.assets import DELETE_ICON_WHITE
+from utils.assets import DELETE_ICON_WHITE, EDIT_ICON_WHITE
 
 from ui.components.image_button import ImageButton
 from ui.components.image_view import ImageView
@@ -34,7 +34,7 @@ class ProfileView(ctk.CTkFrame):
         lb_id.pack(side=tk.LEFT, anchor="w", padx=10)
 
         mods_count = len(self.app.advanced_profile_helper.get_profile_mod_paths(profile.profile_id) or [])
-        resource_packs_count = 0 # TODO: len(self.app.advanced_profile_helper.get_profile_resource_packs(profile.profile_id) or [])
+        resource_packs_count = len(self.app.advanced_profile_helper.get_profile_resource_packs(profile.profile_id))
         
         info_content = []
         if mods_count > 0:
@@ -46,7 +46,11 @@ class ProfileView(ctk.CTkFrame):
         lb_mods_count.pack(side=tk.BOTTOM, anchor="sw")
 
         fv_config = ctk.CTkFrame(self, fg_color="transparent")
-        fv_config.place(relx=1, rely=0, anchor="ne", x=-30, y=0)
+        fv_config.place(relx=1, rely=0, relheight=1, anchor="ne", x=-20, y=0)
+        fv_config.grid_rowconfigure(0, weight=1)
+
+        bt_edit = ImageButton(fv_config, image=EDIT_ICON_WHITE, size=(30, 30), transparent=True)
+        bt_edit.grid(row=0, column=0, padx=10)
 
         bt_delete = ImageButton(fv_config, image=DELETE_ICON_WHITE, size=(30, 30), transparent=True)
-        bt_delete.place(relx=1, rely=0.25, anchor="e")
+        bt_delete.grid(row=0, column=1, padx=10)
