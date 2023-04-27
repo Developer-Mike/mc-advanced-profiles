@@ -1,6 +1,9 @@
 import os, json, shutil
 from utils.mod import Mod
-from typing import List
+
+from typing import TYPE_CHECKING, List
+if TYPE_CHECKING:
+    from utils.minecraft_profiles_helper import MCProfileHelper, MCProfile
 
 class AdvancedProfileHelper:
     _ROOT_PATH = os.path.dirname(os.path.dirname(__file__))
@@ -13,7 +16,7 @@ class AdvancedProfileHelper:
 
     def _get_default_config(self) -> dict:
         return {
-            "server": None,
+            "additional_run_arguments": "",
             "resource_packs": [],
         }
     
@@ -33,6 +36,17 @@ class AdvancedProfileHelper:
         with open(config_path, "r") as f:
             return json.load(f)
 
+    def create_profile(self, profile: "MCProfile"):
+        # TODO
+        pass
+
+    def delete_profile(self, mc_profiles_helper: "MCProfileHelper", profile_id: str):
+        profile_path = self._get_profile_path(profile_id)
+        if os.path.exists(profile_path):
+            shutil.rmtree(profile_path)
+        
+        mc_profiles_helper.remove_profile(profile_id)
+
     def add_profile_mods(self, profile_id: str, mods: List[Mod]):
         mods_path = os.path.join(self._get_profile_path(profile_id), "mods")
 
@@ -41,6 +55,14 @@ class AdvancedProfileHelper:
             target_mod_path = os.path.join(mods_path, os.path.basename(mod.path))
             shutil.copy(mod.path, target_mod_path)
     
+    def remove_profile_mods(self, profile_id: str, modpaths: List[str]):
+        mods_path = os.path.join(self._get_profile_path(profile_id), "mods")
+
+        if not os.path.exists(mods_path): return
+        for relative_modpath in modpaths:
+            modpath = os.path.join(mods_path, os.path.basename(relative_modpath))
+            os.remove(modpath)
+
     def get_profile_mod_paths(self, profile_id: str) -> List[str]:
         mods_path = os.path.join(self._get_profile_path(profile_id), "mods")
 
@@ -53,12 +75,12 @@ class AdvancedProfileHelper:
         if mod_paths is None: return None
         else: return [Mod(mod_path) for mod_path in mod_paths]
 
-    def set_profile_quickplay_server(self, profile_id: str, server: str):
-        self._modify_profile_config(profile_id, "direct_play_server", server)
+    def set_profile_run_arguments(self, profile_id: str, server: str):
+        self._modify_profile_config(profile_id, "additional_run_arguments", server)
 
-    def get_profile_quickplay_server(self, profile_id: str) -> str:
+    def get_profile_run_arguments(self, profile_id: str) -> List[str]:
         profile_config = self._get_profile_config(profile_id)
-        return profile_config["direct_play_server"]
+        return profile_config["additional_run_arguments"].split(" ")
     
     def set_profile_resource_packs(self, profile_id: str, resource_packs: List[str]):
         self._modify_profile_config(profile_id, "resource_packs", resource_packs)

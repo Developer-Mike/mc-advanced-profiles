@@ -17,10 +17,8 @@ minecraft_path = settings.get("minecraft_path")
 advanced_profiles_helper.initialize_profile(minecraft_path, profile_id)
 
 # Add direct play to arguments
-quickplay_server = advanced_profiles_helper.get_profile_quickplay_server(profile_id)
-if quickplay_server is not None:
-    arguments.append("--quickPlayMultiplayer")
-    arguments.append(f'"{quickplay_server}"')
+custom_run_arguments = advanced_profiles_helper.get_profile_run_arguments(profile_id)
+arguments.extend(custom_run_arguments)
 
 # Can't use os.getenv("JAVA_HOME")
 java_path = settings.get("java_path")

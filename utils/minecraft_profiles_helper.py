@@ -44,7 +44,7 @@ class MCProfileHelper:
         }
 
         with open(self.mc_path, "w") as f:
-            json.dump(file, f)
+            json.dump(file, f, indent=4)
 
     def remove_profile(self, profile_id: str) -> None:
         with open(self.mc_path, "r") as f:
@@ -53,4 +53,4 @@ class MCProfileHelper:
         file["profiles"].pop(profile_id)
 
         with open(self.mc_path, "w") as f:
-            json.dump(file, f)
+            json.dump(file, f, indent=4)

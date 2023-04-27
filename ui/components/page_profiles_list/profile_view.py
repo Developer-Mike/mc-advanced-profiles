@@ -49,8 +49,18 @@ class ProfileView(ctk.CTkFrame):
         fv_config.place(relx=1, rely=0, relheight=1, anchor="ne", x=-20, y=0)
         fv_config.grid_rowconfigure(0, weight=1)
 
-        bt_edit = ImageButton(fv_config, image=EDIT_ICON_WHITE, size=(30, 30), transparent=True)
+        bt_edit = ImageButton(fv_config, image=EDIT_ICON_WHITE, size=(30, 30), transparent=True, command=self._edit_profile)
         bt_edit.grid(row=0, column=0, padx=10)
 
-        bt_delete = ImageButton(fv_config, image=DELETE_ICON_WHITE, size=(30, 30), transparent=True)
+        bt_delete = ImageButton(fv_config, image=DELETE_ICON_WHITE, size=(30, 30), transparent=True, command=self._delete_profile)
         bt_delete.grid(row=0, column=1, padx=10)
+
+    def _edit_profile(self):
+        from ui.page_edit_profile import PageEditProfile
+        self.app.navigate(PageEditProfile, profile=self.profile)
+
+    def _delete_profile(self):
+        self.app.advanced_profile_helper.delete_profile(self.app.mc_profile_helper, self.profile.profile_id)
+
+        from ui.page_profiles_list import PageProfilesList
+        self.app.navigate(PageProfilesList)
