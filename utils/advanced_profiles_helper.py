@@ -36,9 +36,35 @@ class AdvancedProfileHelper:
         with open(config_path, "r") as f:
             return json.load(f)
 
-    def create_profile(self, profile: "MCProfile"):
-        # TODO
-        pass
+    def set_profile(self, mc_profiles_helper: MCProfileHelper, profile: "MCProfile", mods: List[Mod], resource_packs: List[str], run_arguments: str):
+        # Create profile folder
+        profile_path = self._get_profile_path(profile.profile_id)
+        if not os.path.exists(profile_path): os.makedirs(profile_path)
+
+        # Add mods
+        mods_path = os.path.join(profile_path, "mods")
+
+        temp_path = os.path.join(mods_path, ".new")
+        for mod in mods:
+            target_mod_path = os.path.join(temp_path, os.path.basename(mod.mod_path))
+            shutil.copy(mod.mod_path, target_mod_path)
+
+        for existing_mod_relative_path in os.listdir(mods_path):
+            existing_mod_path = os.path.join(mods_path, existing_mod_relative_path)
+            if os.path.samefile(existing_mod_path, temp_path): continue
+            
+            shutil.rmtree(existing_mod_path)
+
+        shutil.move(temp_path, mods_path)
+
+        # Set resource packs
+        self._modify_profile_config(profile.profile_id, "resource_packs", resource_packs)
+
+        # Add run arguments
+        self._modify_profile_config(profile.profile_id, "additional_run_arguments", run_arguments)
+
+        # Add profile to profiles.json
+        mc_profiles_helper._set_profile(profile)
 
     def delete_profile(self, mc_profiles_helper: "MCProfileHelper", profile_id: str):
         profile_path = self._get_profile_path(profile_id)
@@ -46,14 +72,6 @@ class AdvancedProfileHelper:
             shutil.rmtree(profile_path)
         
         mc_profiles_helper.remove_profile(profile_id)
-
-    def add_profile_mods(self, profile_id: str, mods: List[Mod]):
-        mods_path = os.path.join(self._get_profile_path(profile_id), "mods")
-
-        if not os.path.exists(mods_path): os.makedirs(mods_path)
-        for mod in mods:
-            target_mod_path = os.path.join(mods_path, os.path.basename(mod.path))
-            shutil.copy(mod.path, target_mod_path)
     
     def remove_profile_mods(self, profile_id: str, modpaths: List[str]):
         mods_path = os.path.join(self._get_profile_path(profile_id), "mods")
@@ -75,15 +93,9 @@ class AdvancedProfileHelper:
         if mod_paths is None: return None
         else: return [Mod(mod_path) for mod_path in mod_paths]
 
-    def set_profile_run_arguments(self, profile_id: str, server: str):
-        self._modify_profile_config(profile_id, "additional_run_arguments", server)
-
     def get_profile_run_arguments(self, profile_id: str) -> List[str]:
         profile_config = self._get_profile_config(profile_id)
         return profile_config["additional_run_arguments"].split(" ")
-    
-    def set_profile_resource_packs(self, profile_id: str, resource_packs: List[str]):
-        self._modify_profile_config(profile_id, "resource_packs", resource_packs)
 
     def get_profile_resource_packs(self, profile_id: str) -> List[str]:
         profile_config = self._get_profile_config(profile_id)

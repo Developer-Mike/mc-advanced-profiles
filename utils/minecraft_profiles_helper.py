@@ -32,7 +32,7 @@ class MCProfileHelper:
         if not ignore_others: return profiles
         else: return [profile for profile in profiles if profile.profile_id.startswith(PROFILE_ID_PREFIX)]
     
-    def add_profile(self, profile: MCProfile) -> None:
+    def _set_profile(self, profile: MCProfile) -> None:
         with open(self.mc_path, "r") as f:
             file = json.load(f)
 
