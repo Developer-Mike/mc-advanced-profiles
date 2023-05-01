@@ -36,7 +36,7 @@ class AdvancedProfileHelper:
         with open(config_path, "r") as f:
             return json.load(f)
 
-    def set_profile(self, mc_profiles_helper: MCProfileHelper, profile: "MCProfile", mods: List[Mod], resource_packs: List[str], run_arguments: str):
+    def set_profile(self, mc_profiles_helper: "MCProfileHelper", profile: "MCProfile", mods: List[Mod], resource_packs: List[str], run_arguments: str):
         # Create profile folder
         profile_path = self._get_profile_path(profile.profile_id)
         if not os.path.exists(profile_path): os.makedirs(profile_path)
