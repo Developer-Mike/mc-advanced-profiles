@@ -2,9 +2,11 @@ import tkinter as tk
 import customtkinter as ctk
 from tkinter import filedialog
 from PIL import Image
-import re, os
+from io import BytesIO
+import re, os, base64
 
 from ui.components.image_view import ImageView
+from ui.components.temed_components import ThemedButton, ThemedEntry
 from utils.minecraft_profiles_helper import MCProfile
 
 from typing import TYPE_CHECKING
@@ -28,27 +30,26 @@ class PageEditProfile(ctk.CTkFrame):
         else:
             self.iv_profile_icon.set_image(Image.open(os.path.join(self.app.ROOT_DIR, "assets", "profile_icons", "default_profile_icon.png")))
 
-        self.bt_upload_icon = ctk.CTkButton(fv_content, text="Upload Icon", text_color="white", fg_color="black", font=("SeogeUI", 20), border_spacing=10, command=self._upload_icon)
+        self.bt_upload_icon = ThemedButton(fv_content, text="Upload Icon", font_size=20, border_spacing=10, command=self._upload_icon)
         self.bt_upload_icon.grid(row=2, column=0, padx=10, pady=10)
 
-        self.et_profile_name = ctk.CTkEntry(fv_content, font=("SeogeUI", 25), width=300)
+        self.et_profile_name = ThemedEntry(fv_content, font_size=25, width=300)
         self.et_profile_name.insert(0, self.profile.profile_name)
         self.et_profile_name.bind("<KeyRelease>", self._update_id)
         self.et_profile_name.grid(row=0, column=1, padx=10, pady=10)
 
-        self.et_profile_id = ctk.CTkEntry(fv_content, text_color="gray", font=("SeogeUI", 20), width=300)
+        self.et_profile_id = ThemedEntry(fv_content, enabled=False, font_size=20, width=300)
         self.et_profile_id.insert(0, self.profile.profile_id)
-        self.et_profile_id.configure(state=tk.DISABLED)
         self.et_profile_id.grid(row=1, column=1, padx=10, pady=10)
 
         fv_content.pack(padx=30, pady=30, fill=tk.BOTH, expand=True)
 
         fv_apply = ctk.CTkFrame(self, fg_color="transparent")
 
-        bt_cancel = ctk.CTkButton(fv_apply, text="Cancel", fg_color="black", text_color="white", font=("SeogeUI", 20), border_spacing=10, command=self._back)
+        bt_cancel = ThemedButton(fv_apply, text="Cancel", font_size=20, border_spacing=10, command=self._back)
         bt_cancel.pack(side=tk.LEFT, padx=10)
 
-        bt_save = ctk.CTkButton(fv_apply, text="Save", font=("SeogeUI", 20), border_spacing=10, command=self._save)
+        bt_save = ThemedButton(fv_apply, text="Save", font_size=20, primary=True, border_spacing=10, command=self._save)
         bt_save.pack(side=tk.RIGHT)
 
         fv_apply.place(relx=1, rely=1, anchor="se", x=-30, y=-30)
@@ -73,7 +74,11 @@ class PageEditProfile(ctk.CTkFrame):
         self.et_profile_id.configure(state=tk.DISABLED)
 
     def _save(self):
-        icon_base64 = "" # ICON
+        icon_image = self.iv_profile_icon.get_image().resize((128, 128), Image.ANTIALIAS)
+
+        icon_buffer = BytesIO()
+        icon_image.save(icon_buffer, format="PNG")
+        icon_base64 = "data:image/png;base64," + base64.b64encode(icon_buffer.getvalue()).decode("utf-8")
 
         self.app.advanced_profile_helper.set_profile(
             self.app.mc_profile_helper,

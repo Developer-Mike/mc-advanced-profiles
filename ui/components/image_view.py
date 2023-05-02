@@ -9,10 +9,12 @@ class ImageView(ctk.CTkLabel):
         self.size = size
         self.radius = radius
 
+        self._pil_image = None
         if image is not None:
             self.set_image(image)
 
     def set_image(self, image: Image):
+        self._pil_image = image.copy()
         image = image.resize(self.size, Image.ANTIALIAS)
 
         if self.radius > 0:
@@ -25,3 +27,6 @@ class ImageView(ctk.CTkLabel):
 
         ctk_image = ctk.CTkImage(image, size=self.size)
         self.configure(image=ctk_image)
+
+    def get_image(self) -> Image:
+        return self._pil_image

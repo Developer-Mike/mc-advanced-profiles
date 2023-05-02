@@ -1,10 +1,12 @@
 import json, os
 from PIL import Image
 from io import BytesIO
+from datetime import datetime
 import base64
 from typing import List
 
 PROFILE_ID_PREFIX = "multiprofile-"
+INTERFERER_PATH = os.path.join(os.path.dirname(os.path.dirname(__file__)), "interferer.exe")
 
 class MCProfile:
     def __init__(self, profile_id: str, profile_icon: str, profile_name: str, version_id: str) -> None:
@@ -30,17 +32,27 @@ class MCProfileHelper:
 
         profiles = [MCProfile(profile_id, profile["icon"], profile["name"], profile["lastVersionId"]) for profile_id, profile in profiles_json.items()]
         if not ignore_others: return profiles
-        else: return [profile for profile in profiles if profile.profile_id.startswith(PROFILE_ID_PREFIX)]
+        else: 
+            filtered_profiles = [profile for profile in profiles if profile.profile_id.startswith(PROFILE_ID_PREFIX)]
+            for profile in filtered_profiles:
+                profile.profile_id = profile.profile_id[len(PROFILE_ID_PREFIX):]
+                
+            return filtered_profiles
     
     def _set_profile(self, profile: MCProfile) -> None:
         with open(self.mc_path, "r") as f:
             file = json.load(f)
 
-        file["profiles"][profile.profile_id] = {
+        now = datetime.now().isoformat()
+        file["profiles"][PROFILE_ID_PREFIX + profile.profile_id] = {
+            "created": now,
+            "icon": profile.profile_icon,
+            "javaArgs": f"--multiprofile {profile.profile_id}",
+            "javaDir": INTERFERER_PATH.replace("\\", "/"),
+            "lastUsed": now,
+            "lastVersionId": profile.version_id,
             "name": profile.profile_name,
-            "type": "custom",
-            "gameDir": self.mc_path,
-            "lastVersionId": profile.version_id
+            "type": "custom"
         }
 
         with open(self.mc_path, "w") as f:

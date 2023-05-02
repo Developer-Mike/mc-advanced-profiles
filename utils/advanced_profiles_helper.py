@@ -43,8 +43,11 @@ class AdvancedProfileHelper:
 
         # Add mods
         mods_path = os.path.join(profile_path, "mods")
+        if not os.path.exists(mods_path): os.makedirs(mods_path)
 
         temp_path = os.path.join(mods_path, ".new")
+        if not os.path.exists(temp_path): os.makedirs(temp_path)
+
         for mod in mods:
             target_mod_path = os.path.join(temp_path, os.path.basename(mod.mod_path))
             shutil.copy(mod.mod_path, target_mod_path)
@@ -53,9 +56,15 @@ class AdvancedProfileHelper:
             existing_mod_path = os.path.join(mods_path, existing_mod_relative_path)
             if os.path.samefile(existing_mod_path, temp_path): continue
             
-            shutil.rmtree(existing_mod_path)
+            os.remove(existing_mod_path)
 
-        shutil.move(temp_path, mods_path)
+        # Copy mods from .new to mods folder
+        for mod_relative_path in os.listdir(temp_path):
+            mod_path = os.path.join(temp_path, mod_relative_path)
+            shutil.move(mod_path, os.path.join(mods_path, os.path.basename(mod_path)))
+
+        # Remove .new folder
+        shutil.rmtree(temp_path)
 
         # Set resource packs
         self._modify_profile_config(profile.profile_id, "resource_packs", resource_packs)
