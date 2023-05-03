@@ -38,6 +38,12 @@ class MCProfileHelper:
                 profile.profile_id = profile.profile_id[len(PROFILE_ID_PREFIX):]
                 
             return filtered_profiles
+        
+    def get_versions(self) -> List[str]:
+        profiles = self.get_profiles(ignore_others=False)
+        profile_ids = [profile.version_id for profile in profiles]
+        
+        return list(set(profile_ids))
     
     def _set_profile(self, profile: MCProfile) -> None:
         with open(self.mc_path, "r") as f:

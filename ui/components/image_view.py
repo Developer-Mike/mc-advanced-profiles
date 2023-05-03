@@ -1,5 +1,5 @@
 import customtkinter as ctk
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFilter
 from typing import Tuple
 
 class ImageView(ctk.CTkLabel):
@@ -20,7 +20,8 @@ class ImageView(ctk.CTkLabel):
         if self.radius > 0:
             mask = Image.new("L", self.size, 0)
             draw = ImageDraw.Draw(mask)
-            draw.rounded_rectangle((0, 0) + self.size, self.radius, fill=255)
+            draw.rounded_rectangle((2, 2, self.size[0] - 2, self.size[1] - 2), self.radius, fill=255)
+            mask = mask.filter(ImageFilter.BoxBlur(1))
 
             image = image.copy().convert("RGB")
             image.putalpha(mask)

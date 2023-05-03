@@ -102,9 +102,9 @@ class AdvancedProfileHelper:
         if mod_paths is None: return None
         else: return [Mod(mod_path) for mod_path in mod_paths]
 
-    def get_profile_run_arguments(self, profile_id: str) -> List[str]:
+    def get_profile_run_arguments(self, profile_id: str) -> str:
         profile_config = self._get_profile_config(profile_id)
-        return profile_config["additional_run_arguments"].split(" ")
+        return profile_config["additional_run_arguments"]
 
     def get_profile_resource_packs(self, profile_id: str) -> List[str]:
         profile_config = self._get_profile_config(profile_id)

@@ -17,7 +17,7 @@ minecraft_path = settings.get("minecraft_path")
 advanced_profiles_helper.initialize_profile(minecraft_path, profile_id)
 
 # Add direct play to arguments
-custom_run_arguments = advanced_profiles_helper.get_profile_run_arguments(profile_id)
+custom_run_arguments = advanced_profiles_helper.get_profile_run_arguments(profile_id).split(" ")
 arguments.extend(custom_run_arguments)
 
 # Can't use os.getenv("JAVA_HOME")

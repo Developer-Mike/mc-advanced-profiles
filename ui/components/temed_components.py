@@ -11,6 +11,11 @@ class ThemedButton(ctk.CTkButton):
 
         super().__init__(root, **kwargs)
 
+class ThemedLabel(ctk.CTkLabel):
+    def __init__(self, root, font_size = 15, bold = False, **kwargs):
+        kwargs["font"] = ("SeogeUI", font_size, "bold" if bold else "normal")
+        super().__init__(root, **kwargs)
+
 class ThemedEntry(ctk.CTkEntry):
     def __init__(self, root, font_size = 15, bold = False, enabled = True, **kwargs):
         kwargs["font"] = ("SeogeUI", font_size, "bold" if bold else "normal")
@@ -30,3 +35,11 @@ class ThemedEntry(ctk.CTkEntry):
         super().insert(index, string)
 
         if is_disabled: self.configure(state=tk.DISABLED)
+
+
+class ThemedDropdown(ctk.CTkComboBox):
+    def __init__(self, root, font_size = 15, bold = False, **kwargs):
+        kwargs["state"] = "readonly"
+        kwargs["font"] = ("SeogeUI", font_size, "bold" if bold else "normal")
+
+        super().__init__(root, **kwargs)
