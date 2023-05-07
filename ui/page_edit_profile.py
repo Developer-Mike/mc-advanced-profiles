@@ -6,7 +6,8 @@ from io import BytesIO
 import re, os, base64
 
 from ui.components.image_view import ImageView
-from ui.components.temed_components import ThemedButton, ThemedDropdown, ThemedEntry, ThemedLabel
+from ui.components.page_edit_profile.mod_selection import ModSelection
+from ui.components.themed_components import ThemedButton, ThemedDropdown, ThemedEntry
 from utils.minecraft_profiles_helper import MCProfile
 
 from typing import TYPE_CHECKING
@@ -22,45 +23,42 @@ class PageEditProfile(ctk.CTkFrame):
         self.profile = profile if self.existing_profile else MCProfile("", "", "", "")
 
         fv_content_scroller = ctk.CTkScrollableFrame(self, fg_color="transparent")
-        fv_content = ctk.CTkFrame(fv_content_scroller, fg_color="transparent")
+        fv_general_settings = ctk.CTkFrame(fv_content_scroller, fg_color="transparent")
 
-        self.iv_profile_icon = ImageView(fv_content, None, size=(100, 100), radius=25)
+        self.iv_profile_icon = ImageView(fv_general_settings, None, size=(100, 100), radius=25)
         self.iv_profile_icon.grid(row=0, column=0, rowspan=2)
         if self.existing_profile:
             self.iv_profile_icon.set_image(self.profile.get_icon())
         else:
             self.iv_profile_icon.set_image(Image.open(os.path.join(self.app.ROOT_DIR, "assets", "profile_icons", "default_profile_icon.png")))
 
-        self.bt_upload_icon = ThemedButton(fv_content, text="Upload Icon", font_size=20, border_spacing=10, command=self._upload_icon)
+        self.bt_upload_icon = ThemedButton(fv_general_settings, text="Upload Icon", font_size=20, border_spacing=10, command=self._upload_icon)
         self.bt_upload_icon.grid(row=2, column=0, padx=10, pady=10)
 
-        self.et_profile_name = ThemedEntry(fv_content, font_size=30, width=400)
+        self.et_profile_name = ThemedEntry(fv_general_settings, label="Profile Name", font_size=30, width=400)
         self.et_profile_name.insert(0, self.profile.profile_name)
         self.et_profile_name.bind("<KeyRelease>", self._update_id)
         self.et_profile_name.grid(row=0, column=1, padx=10, pady=10, sticky="w")
 
-        self.et_profile_id = ThemedEntry(fv_content, enabled=False, font_size=20, width=300)
+        self.et_profile_id = ThemedEntry(fv_general_settings, label="ID", enabled=False, font_size=20, width=300)
         self.et_profile_id.insert(0, self.profile.profile_id)
-        self.et_profile_id.grid(row=1, column=1, padx=10, pady=10, sticky="w")
+        self.et_profile_id.grid(row=1, column=1, padx=10, pady=5, sticky="w")
 
-        self.dd_version = ThemedDropdown(fv_content, values=app.mc_profile_helper.get_versions(), width=300)
+        self.dd_version = ThemedDropdown(fv_general_settings, values=app.mc_profile_helper.get_versions(), width=300)
         self.dd_version.set(self.profile.version_id)
         self.dd_version.grid(row=2, column=1, padx=10, pady=10, sticky="w")
 
-        fv_java_args = ctk.CTkFrame(fv_content, fg_color="transparent")
+        fv_general_settings.pack(padx=30, pady=(30, 0), fill=tk.BOTH, expand=True)
+        fv_main_settings = ctk.CTkFrame(fv_content_scroller, fg_color="transparent")
 
-        self.et_java_args = ThemedEntry(fv_java_args, font_size=20, width=300)
+        self.et_java_args = ThemedEntry(fv_main_settings, label="Java Arguments", font_size=20, width=300)
         self.et_java_args.insert(0, self.app.advanced_profile_helper.get_profile_run_arguments(self.profile.profile_id))
-        self.et_java_args.pack(side=tk.LEFT, pady=10)
+        self.et_java_args.grid(row=0, column=0, sticky="w")
 
-        lb_java_args = ThemedLabel(fv_java_args, text="Java Arguments", font_size=20)
-        lb_java_args.pack(side=tk.LEFT, padx=10, pady=10)
+        sl_mod_selection = ModSelection(fv_main_settings, self.app, self.app.advanced_profile_helper.get_profile_mods(self.profile.profile_id))
+        sl_mod_selection.grid(row=1, column=0, pady=40, sticky="w")
 
-        fv_java_args.grid(row=3, column=1, columnspan=2, padx=10, pady=(30, 10), sticky="w")
-
-        # TODO: Add mods and resource packs
-
-        fv_content.pack(padx=30, pady=30, fill=tk.BOTH, expand=True)
+        fv_main_settings.pack(padx=30, pady=(30, 30), fill=tk.BOTH, expand=True)
         fv_content_scroller.pack(fill=tk.BOTH, expand=True)
 
         fv_apply = ctk.CTkFrame(self, fg_color="transparent")
