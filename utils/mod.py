@@ -52,10 +52,15 @@ class Mod:
                     self.mod_name = config_json["name"]
                     self.mod_description = config_json["description"]
                     self.mod_version = config_json["version"]
-                    self.mod_minecraft_version = config_json["depends"]["minecraft"].split(" ")
+
+                    minecraft_version = config_json["depends"].get("minecraft")
+                    if minecraft_version is None: self.mod_minecraft_version = ["*"]
+                    elif isinstance(minecraft_version, list): self.mod_minecraft_version = minecraft_version
+                    else: self.mod_minecraft_version = minecraft_version.split(" ")
+
                     self.mod_dependencies = [dependency for dependency in config_json["depends"] if dependency not in ["minecraft", "fabricloader", "fabric"]]
 
-                    mod_icon_path = config_json["icon"]
+                    mod_icon_path = config_json.get("icon")
                     if mod_icon_path is not None:
                         with zf.open(mod_icon_path) as f:
                             self.mod_icon = Image.open(BytesIO(f.read()))
@@ -97,3 +102,6 @@ class Mod:
                     return True
                 
         return False
+    
+    def __eq__(self, __value: object) -> bool:
+        return self.mod_path == __value.mod_path

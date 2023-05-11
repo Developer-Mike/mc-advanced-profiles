@@ -35,10 +35,11 @@ class ThemedEntry(ctk.CTkFrame):
         self.entry.configure(state=tk.NORMAL if enabled else tk.DISABLED)
         self.entry.configure(text_color="white" if enabled else "gray")
 
-    def insert(self, index, string):
+    def insert(self, index, string, clear = False):
         is_disabled = self.entry.cget("state") == tk.DISABLED
         if is_disabled: self.entry.configure(state=tk.NORMAL)
 
+        if clear: self.entry.delete(0, tk.END)
         self.entry.insert(index, string)
 
         if is_disabled: self.entry.configure(state=tk.DISABLED)

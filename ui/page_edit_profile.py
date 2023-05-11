@@ -37,7 +37,7 @@ class PageEditProfile(ctk.CTkFrame):
 
         self.et_profile_name = ThemedEntry(fv_general_settings, label="Profile Name", font_size=30, width=400)
         self.et_profile_name.insert(0, self.profile.profile_name)
-        self.et_profile_name.bind("<KeyRelease>", self._update_id)
+        self.et_profile_name.entry.bind("<KeyRelease>", self._update_id)
         self.et_profile_name.grid(row=0, column=1, padx=10, pady=10, sticky="w")
 
         self.et_profile_id = ThemedEntry(fv_general_settings, label="ID", enabled=False, font_size=20, width=300)
@@ -64,7 +64,7 @@ class PageEditProfile(ctk.CTkFrame):
         fv_apply = ctk.CTkFrame(self, fg_color="transparent")
 
         bt_cancel = ThemedButton(fv_apply, text="Cancel", font_size=20, border_spacing=10, command=self._back)
-        bt_cancel.pack(side=tk.LEFT, padx=10)
+        bt_cancel.pack(side=tk.LEFT, padx=(0, 10))
 
         bt_save = ThemedButton(fv_apply, text="Save", font_size=20, primary=True, border_spacing=10, command=self._save)
         bt_save.pack(side=tk.RIGHT)
@@ -81,14 +81,11 @@ class PageEditProfile(ctk.CTkFrame):
     def _update_id(self, event):
         if self.existing_profile: return
 
-        new_id = self.et_profile_name.get()
+        new_id = self.et_profile_name.entry.get()
         new_id = new_id.lower().replace(" ", "-")
         new_id = "".join([c for c in new_id if re.match(r"[a-z0-9\-\.]", c) is not None])
 
-        self.et_profile_id.configure(state=tk.NORMAL)
-        self.et_profile_id.delete(0, tk.END)
-        self.et_profile_id.insert(0, new_id)
-        self.et_profile_id.configure(state=tk.DISABLED)
+        self.et_profile_id.insert(0, new_id, clear=True)
 
     def _save(self):
         icon_image = self.iv_profile_icon.get_image().resize((128, 128), Image.ANTIALIAS)
