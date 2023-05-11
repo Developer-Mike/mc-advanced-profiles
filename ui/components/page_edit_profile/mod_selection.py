@@ -30,7 +30,7 @@ class ModSelection(ctk.CTkFrame):
         self.fv_mods = ctk.CTkFrame(self, fg_color="transparent")
         self.mods = []
         self._fill_mod_list(mods or [])
-        self.fv_mods.pack(side=tk.TOP, anchor="nw")
+        self.fv_mods.pack(side=tk.TOP, anchor="nw", padx=20, pady=10, fill="both", expand=True)
 
     def _fill_mod_list(self, mods: List[Mod]):
         for mod in mods:
@@ -51,16 +51,12 @@ class ModSelection(ctk.CTkFrame):
             self.mods.append(mod)
 
         mod_view = ModView(self.app, self.fv_mods, mod, self._delete_mod)
-        mod_view.pack(pady=10, fill="x")
+        mod_view.pack(pady=5, fill="x")
 
     def _delete_mod(self, mod: Mod):
         self.mods.remove(mod)
-        self.fv_mods.destroy()
-
+        
         for widget in self.fv_mods.winfo_children():
-            try:
-                widget.destroy()
-            except tk.TclError:
-                pass
+            widget.destroy()
 
         self._fill_mod_list(self.mods)

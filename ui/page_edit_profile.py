@@ -55,8 +55,8 @@ class PageEditProfile(ctk.CTkFrame):
         self.et_java_args.insert(0, self.app.advanced_profile_helper.get_profile_run_arguments(self.profile.profile_id))
         self.et_java_args.grid(row=0, column=0, sticky="w")
 
-        sl_mod_selection = ModSelection(fv_main_settings, self.app, self.app.advanced_profile_helper.get_profile_mods(self.profile.profile_id))
-        sl_mod_selection.grid(row=1, column=0, pady=40, sticky="w")
+        self.sl_mod_selection = ModSelection(fv_main_settings, self.app, self.app.advanced_profile_helper.get_profile_mods(self.profile.profile_id))
+        self.sl_mod_selection.grid(row=1, column=0, pady=40, sticky="w")
 
         fv_main_settings.pack(padx=30, pady=(30, 30), fill=tk.BOTH, expand=True)
         fv_content_scroller.pack(fill=tk.BOTH, expand=True)
@@ -102,7 +102,7 @@ class PageEditProfile(ctk.CTkFrame):
                 self.et_profile_name.get(),
                 self.dd_version.get()
             ),
-            [], # MODS
+            self.sl_mod_selection.get_mods(),
             [], # RESOURCE PACKS
             self.et_java_args.get()
         )

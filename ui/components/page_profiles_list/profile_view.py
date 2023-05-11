@@ -5,6 +5,7 @@ from utils.assets import DELETE_ICON_WHITE, EDIT_ICON_WHITE
 
 from ui.components.image_button import ImageButton
 from ui.components.image_view import ImageView
+from ui.components.themed_components import ThemedLabel
 
 from typing import TYPE_CHECKING
 if TYPE_CHECKING:
@@ -27,10 +28,10 @@ class ProfileView(ctk.CTkFrame):
         fv_name = ctk.CTkFrame(fv_content, fg_color="transparent")
         fv_name.pack(side=tk.TOP, anchor="nw", fill="x", expand=True)
 
-        lb_name = ctk.CTkLabel(fv_name, text=profile.profile_name, font=("Arial", 20, "bold"))
+        lb_name = ThemedLabel(fv_name, text=profile.profile_name, font_size=20, bold=True)
         lb_name.pack(side=tk.LEFT, anchor="nw")
 
-        lb_id = ctk.CTkLabel(fv_name, text=f"({profile.profile_id})", font=("Arial", 15), text_color="#aaaaaa")
+        lb_id = ThemedLabel(fv_name, text=f"({profile.profile_id})", font_size=15, text_color="#aaaaaa")
         lb_id.pack(side=tk.LEFT, anchor="w", padx=10)
 
         mods_count = len(self.app.advanced_profile_helper.get_profile_mod_paths(profile.profile_id) or [])
@@ -42,7 +43,7 @@ class ProfileView(ctk.CTkFrame):
         if resource_packs_count > 0:
             info_content.append(f"{resource_packs_count} Resource Packs")
 
-        lb_mods_count = ctk.CTkLabel(fv_content, text="  |  ".join(info_content), font=("Arial", 15), text_color="#aaaaaa")
+        lb_mods_count = ThemedLabel(fv_content, text="  |  ".join(info_content), font_size=15, text_color="#aaaaaa")
         lb_mods_count.pack(side=tk.BOTTOM, anchor="sw")
 
         fv_config = ctk.CTkFrame(self, fg_color="transparent")
