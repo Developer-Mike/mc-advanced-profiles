@@ -35,7 +35,7 @@ class ProfileView(ctk.CTkFrame):
         lb_id.pack(side=tk.LEFT, anchor="w", padx=10)
 
         mods_count = len(self.app.advanced_profile_helper.get_profile_mod_paths(profile.profile_id) or [])
-        resource_packs_count = len(self.app.advanced_profile_helper.get_profile_resource_packs(profile.profile_id))
+        resource_packs_count = len(self.app.advanced_profile_helper.get_profile_resource_packs(app.settings_helper.get("minecraft_path"), profile.profile_id))
         
         info_content = []
         if mods_count > 0:

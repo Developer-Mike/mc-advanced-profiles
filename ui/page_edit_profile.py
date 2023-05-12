@@ -7,6 +7,7 @@ import re, os, base64
 
 from ui.components.image_view import ImageView
 from ui.components.page_edit_profile.mod_selection import ModSelection
+from ui.components.page_edit_profile.resource_pack_selection import ResourcePackSelection
 from ui.components.themed_components import ThemedButton, ThemedDropdown, ThemedEntry
 from utils.minecraft_profiles_helper import MCProfile
 
@@ -56,7 +57,10 @@ class PageEditProfile(ctk.CTkFrame):
         self.et_java_args.grid(row=0, column=0, sticky="w")
 
         self.sl_mod_selection = ModSelection(fv_main_settings, self.app, self.app.advanced_profile_helper.get_profile_mods(self.profile.profile_id))
-        self.sl_mod_selection.grid(row=1, column=0, pady=40, sticky="w")
+        self.sl_mod_selection.grid(row=1, column=0, pady=30, sticky="w")
+
+        self.sl_resource_pack_selection = ResourcePackSelection(fv_main_settings, self.app, self.app.advanced_profile_helper.get_profile_resource_packs(app.settings_helper.get("minecraft_path"), self.profile.profile_id))
+        self.sl_resource_pack_selection.grid(row=2, column=0, pady=30, sticky="w")
 
         fv_main_settings.pack(padx=30, pady=(30, 30), fill=tk.BOTH, expand=True)
         fv_content_scroller.pack(fill=tk.BOTH, expand=True)
@@ -97,14 +101,14 @@ class PageEditProfile(ctk.CTkFrame):
         self.app.advanced_profile_helper.set_profile(
             self.app.mc_profile_helper,
             MCProfile(
-                self.et_profile_id.get(),
+                self.et_profile_id.entry.get(),
                 icon_base64,
-                self.et_profile_name.get(),
+                self.et_profile_name.entry.get(),
                 self.dd_version.get()
             ),
-            self.sl_mod_selection.get_mods(),
-            [], # RESOURCE PACKS
-            self.et_java_args.get()
+            self.sl_mod_selection.mods,
+            self.sl_resource_pack_selection.resource_packs,
+            self.et_java_args.entry.get()
         )
 
         from ui.page_profiles_list import PageProfilesList

@@ -14,7 +14,7 @@ app.minsize(1000, 550)
 def restart(e):
     if e.keysym == "F5":
         app.destroy()
-        os.system(f'cmd /k "python {__file__}"')
+        os.system(f'cmd /k "python {__file__} -B"')
 
 app.bind("<KeyRelease>", restart)
 

@@ -1,5 +1,7 @@
 import os, json, shutil
+
 from utils.mod import Mod
+from utils.resource_pack import ResourcePack
 
 from typing import TYPE_CHECKING, List
 if TYPE_CHECKING:
@@ -36,7 +38,7 @@ class AdvancedProfileHelper:
         with open(config_path, "r") as f:
             return json.load(f)
 
-    def set_profile(self, mc_profiles_helper: "MCProfileHelper", profile: "MCProfile", mods: List[Mod], resource_packs: List[str], run_arguments: str):
+    def set_profile(self, mc_profiles_helper: "MCProfileHelper", profile: "MCProfile", mods: List[Mod], resource_packs: List[ResourcePack], run_arguments: str):
         # Create profile folder
         profile_path = self._get_profile_path(profile.profile_id)
         if not os.path.exists(profile_path): os.makedirs(profile_path)
@@ -49,8 +51,8 @@ class AdvancedProfileHelper:
         if not os.path.exists(temp_path): os.makedirs(temp_path)
 
         for mod in mods:
-            target_mod_path = os.path.join(temp_path, os.path.basename(mod.mod_path))
-            shutil.copy(mod.mod_path, target_mod_path)
+            target_mod_path = os.path.join(temp_path, os.path.basename(mod.path))
+            shutil.copy(mod.path, target_mod_path)
 
         for existing_mod_relative_path in os.listdir(mods_path):
             existing_mod_path = os.path.join(mods_path, existing_mod_relative_path)
@@ -67,7 +69,7 @@ class AdvancedProfileHelper:
         shutil.rmtree(temp_path)
 
         # Set resource packs
-        self._modify_profile_config(profile.profile_id, "resource_packs", resource_packs)
+        self._modify_profile_config(profile.profile_id, "resource_packs", list(map(lambda resource_pack: resource_pack.filename, resource_packs)))
 
         # Add run arguments
         self._modify_profile_config(profile.profile_id, "additional_run_arguments", run_arguments)
@@ -106,12 +108,16 @@ class AdvancedProfileHelper:
         profile_config = self._get_profile_config(profile_id)
         return profile_config["additional_run_arguments"]
 
-    def get_profile_resource_packs(self, profile_id: str) -> List[str]:
+    def get_profile_resource_pack_paths(self, mc_path: str, profile_id: str) -> List[str]:
         profile_config = self._get_profile_config(profile_id)
-        return profile_config["resource_packs"]
+        return [os.path.join(mc_path, "resourcepacks", resource_pack_path) for resource_pack_path in profile_config["resource_packs"]]
 
-    def _set_options_txt_resource_packs(self, mc_path: str, resource_packs: List[str]) -> List[str]:
-        new_resource_packs_strings = [f'"{resource_pack}"' for resource_pack in resource_packs]
+    def get_profile_resource_packs(self, mc_path: str, profile_id: str) -> List[ResourcePack]:
+        resource_pack_paths = self.get_profile_resource_pack_paths(mc_path, profile_id)
+        return [ResourcePack(resource_pack_path) for resource_pack_path in resource_pack_paths]
+
+    def _set_options_txt_resource_packs(self, mc_path: str, resource_packs: List[ResourcePack]) -> List[str]:
+        new_resource_packs_strings = [f'"{resource_pack.filename}"' for resource_pack in resource_packs]
         new_resource_packs = f"[{','.join(new_resource_packs_strings)}]"
 
         options_txt_path = os.path.join(mc_path, "options.txt")
@@ -154,7 +160,8 @@ class AdvancedProfileHelper:
         # Get and replace the default active resource packs
         new_resource_packs = self.get_profile_resource_packs(profile_id)
         old_resource_packs = self._set_options_txt_resource_packs(mc_path, new_resource_packs)
-        self.set_profile_resource_packs(None, old_resource_packs)
+
+        self._modify_profile_config(None, "resource_packs", old_resource_packs)
 
     def restore_default_profile(self, mc_path: str):
         mc_mod_folder = os.path.join(mc_path, "mods")
