@@ -16,6 +16,9 @@ class SettingsHelper:
         
     def set(self, key, value) -> None:
         self.settings[key] = value
+
+        if not os.path.exists(os.path.dirname(SettingsHelper.SETTINGS_PATH)):
+            os.makedirs(os.path.dirname(SettingsHelper.SETTINGS_PATH))
         json.dump(self.settings, open(SettingsHelper.SETTINGS_PATH, 'w'))
         
     def _generate_default_settings(self) -> dict:

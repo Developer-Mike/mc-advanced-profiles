@@ -33,7 +33,7 @@ class ModSelection(ctk.CTkFrame):
 
         self.fv_mods = ctk.CTkFrame(self, fg_color="transparent")
         self.mods = []
-        self._fill_mod_list(mods or [])
+        self._fill_mod_list(mods)
         self.fv_mods.pack(anchor="nw", padx=20, pady=10, fill="x", expand=True)
 
     def _fill_mod_list(self, mods: List[Mod]):

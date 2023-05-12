@@ -95,14 +95,12 @@ class AdvancedProfileHelper:
     def get_profile_mod_paths(self, profile_id: str) -> List[str]:
         mods_path = os.path.join(self._get_profile_path(profile_id), "mods")
 
-        if not os.path.exists(mods_path): return None
+        if not os.path.exists(mods_path): return []
         else: return [os.path.join(mods_path, mod_path) for mod_path in os.listdir(mods_path) if mod_path.endswith(".jar")]
 
     def get_profile_mods(self, profile_id: str) -> List[Mod]:
         mod_paths = self.get_profile_mod_paths(profile_id)
-
-        if mod_paths is None: return None
-        else: return [Mod(mod_path) for mod_path in mod_paths]
+        return [Mod(mod_path) for mod_path in mod_paths]
 
     def get_profile_run_arguments(self, profile_id: str) -> str:
         profile_config = self._get_profile_config(profile_id)
@@ -116,8 +114,8 @@ class AdvancedProfileHelper:
         resource_pack_paths = self.get_profile_resource_pack_paths(mc_path, profile_id)
         return [ResourcePack(resource_pack_path) for resource_pack_path in resource_pack_paths]
 
-    def _set_options_txt_resource_packs(self, mc_path: str, resource_packs: List[ResourcePack]) -> List[str]:
-        new_resource_packs_strings = [f'"{resource_pack.filename}"' for resource_pack in resource_packs]
+    def _set_options_txt_resource_packs(self, mc_path: str, resource_packs: List[str]) -> List[str]:
+        new_resource_packs_strings = [f'"{os.path.basename(resource_pack_path)}"' for resource_pack_path in resource_packs]
         new_resource_packs = f"[{','.join(new_resource_packs_strings)}]"
 
         options_txt_path = os.path.join(mc_path, "options.txt")
@@ -158,7 +156,7 @@ class AdvancedProfileHelper:
             shutil.copy(mod_path, os.path.join(mc_mod_folder, os.path.basename(mod_path)))
 
         # Get and replace the default active resource packs
-        new_resource_packs = self.get_profile_resource_packs(profile_id)
+        new_resource_packs = self.get_profile_resource_pack_paths(mc_path, profile_id)
         old_resource_packs = self._set_options_txt_resource_packs(mc_path, new_resource_packs)
 
         self._modify_profile_config(None, "resource_packs", old_resource_packs)
@@ -174,4 +172,4 @@ class AdvancedProfileHelper:
             if not mod_path.endswith(".jar"): continue
             shutil.move(mod_path, os.path.join(mc_mod_folder, os.path.basename(mod_path)))
 
-        self._set_options_txt_resource_packs(mc_path, self.get_profile_resource_packs(None))
+        self._set_options_txt_resource_packs(mc_path, self.get_profile_resource_pack_paths(mc_path, None))
