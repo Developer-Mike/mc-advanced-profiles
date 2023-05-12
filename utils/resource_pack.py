@@ -5,6 +5,7 @@ class ResourcePack:
     def __init__(self, resource_pack_path: str) -> None:
         self.path = resource_pack_path
         self.filename = os.path.basename(resource_pack_path)
+        self.description = ""
         self.icon = None
         self.is_valid = True
 
@@ -13,10 +14,12 @@ class ResourcePack:
                 self.is_valid = False
                 return
             
-            with zf.open("pack.mcmeta") as f:
-                config_json = json.load(f)["pack"]
-
-                self.description = config_json["description"]
+            try:
+                with zf.open("pack.mcmeta") as f:
+                    config_json = json.load(f)["pack"]
+                    self.description = config_json["description"]
+            except:
+                pass
 
             try:
                 with zf.open("pack.png") as f:

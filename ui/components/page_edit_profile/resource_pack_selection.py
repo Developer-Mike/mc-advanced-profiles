@@ -21,11 +21,15 @@ class ResourcePackSelection(ctk.CTkFrame):
 
         self.app = app
 
-        lb_resource_packs = ThemedLabel(self, text="Resource Packs", font_size=30, bold=True)
-        lb_resource_packs.pack(side=tk.LEFT, anchor="nw", pady=10)
+        fv_header = ctk.CTkFrame(self, fg_color="transparent")
 
-        bt_add_resource_pack = ImageButton(self, PLUS_ICON_WHITE, size=(25, 25), padding=(5, 5), command=self._add_resource_pack_dialog)
-        bt_add_resource_pack.pack(side=tk.LEFT, anchor="nw", padx=20, pady=10)
+        lb_resource_packs = ThemedLabel(fv_header, text="Resource Packs", font_size=30, bold=True)
+        lb_resource_packs.grid(row=0, column=0, sticky="w")
+
+        bt_add_resource_pack = ImageButton(fv_header, PLUS_ICON_WHITE, size=(25, 25), padding=(5, 5), command=self._add_resource_pack_dialog)
+        bt_add_resource_pack.grid(row=0, column=1, sticky="w", padx=20)
+
+        fv_header.pack(anchor="nw", pady=10)
 
         self.fv_resource_packs = ctk.CTkFrame(self, fg_color="transparent")
         self.resource_packs = []
