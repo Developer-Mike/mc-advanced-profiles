@@ -23,4 +23,4 @@ class SettingsHelper:
         
     def _generate_default_settings(self) -> dict:
         self.set("minecraft_path", f"C:/Users/{os.getlogin()}/AppData/Roaming/.minecraft")
-        self.set("java_path", os.join(os.getenv("JAVA_HOME"), "/bin/java.exe"))
+        self.set("java_path", os.path.join(os.getenv("JAVA_HOME"), "/bin/java.exe"))

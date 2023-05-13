@@ -93,5 +93,5 @@ coll = COLLECT(
 )
 
 # Debug
-import shutil
-shutil.copytree("config", "dist/AdvancedProfiles/config")
+# import shutil
+# shutil.copytree("config", "dist/AdvancedProfiles/config")

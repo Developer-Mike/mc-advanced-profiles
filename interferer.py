@@ -3,14 +3,11 @@ from utils.advanced_profiles_helper import AdvancedProfileHelper
 from utils.settings_helper import SettingsHelper
 
 # Get Profile ID
-'''arguments = sys.argv[1:]
+arguments = sys.argv[1:]
 profile_id_index = arguments.index("--multiprofile")
 arguments.pop(profile_id_index)
 profile_id = arguments.pop(profile_id_index)
-print("Profile ID: " + profile_id)'''
-
-arguments = []
-profile_id = "multiprofile-1.8"
+print("Profile ID: " + profile_id)
 
 # Init profile
 settings = SettingsHelper()
