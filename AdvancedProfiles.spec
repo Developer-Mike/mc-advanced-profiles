@@ -66,7 +66,7 @@ interferer_exe = EXE(
     bootloader_ignore_signals=False,
     strip=False,
     upx=True,
-    console=True, # change to False for GUI
+    console=True,
     disable_windowed_traceback=False,
     argv_emulation=False,
     target_arch=None,
@@ -91,7 +91,3 @@ coll = COLLECT(
     upx_exclude=[],
     name='AdvancedProfiles',
 )
-
-# Debug
-# import shutil
-# shutil.copytree("config", "dist/AdvancedProfiles/config")
