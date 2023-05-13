@@ -26,6 +26,7 @@ Profile in the official launcher.
 - [ ] Add support for modpacks
 - [ ] Hide additional window when launching game
 - [ ] Settings screen
+- [ ] Smaller folder size
 - [ ] Auto update mods (maybe)
 
 ## Settings

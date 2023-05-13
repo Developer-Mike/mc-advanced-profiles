@@ -9,10 +9,10 @@ class ModType:
 class Mod:
     def __init__(self, mod_path: str) -> None:
         self.path = mod_path
-        self.id = None
+        self.id = ""
         self.icon = None
         self.mod_name = os.path.basename(mod_path).split(".")[0]
-        self.description = None
+        self.description = ""
         self.version = None
         self.client_type = None
         self.minecraft_version = ["*"]
@@ -36,10 +36,10 @@ class Mod:
                     self.description = config_json["description"]
                     self.version = config_json["version"]
                     self.minecraft_version = [config_json["mcversion"]]
-                    self.dependencies = config_json["requiredMods"]
+                    self.dependencies = config_json.get("requiredMods") or []
 
-                    mod_icon_path = config_json["logoFile"]
-                    if mod_icon_path is not None:
+                    mod_icon_path = config_json.get("logoFile")
+                    if mod_icon_path is not None and mod_icon_path != "":
                         with zf.open(mod_icon_path) as f:
                             self.icon = Image.open(f)
 
