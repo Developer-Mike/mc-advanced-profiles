@@ -19,51 +19,52 @@ class Mod:
         self.dependencies = {}
 
         with zipfile.ZipFile(mod_path, 'r') as zf:
-            content = zf.infolist()
-            filenames = [file_info.filename for file_info in content]
-
-            if "fabric.mod.json" in filenames:
+            if "fabric.mod.json" in zf.namelist():
                 self.client_type = ModType.FABRIC
-            elif "mcmod.info" in filenames:
+
+                try: 
+                    with zf.open("fabric.mod.json") as f:
+                        config_json = json.load(f)
+
+                        self.id = config_json.get("id")
+                        self.mod_name = config_json.get("name")
+                        self.description = config_json.get("description")
+                        self.version = config_json.get("version")
+
+                        minecraft_version = (config_json.get("depends") or {}).get("minecraft")
+                        if minecraft_version is None: self.minecraft_version = ["*"]
+                        elif isinstance(minecraft_version, list): self.minecraft_version = minecraft_version
+                        else: self.minecraft_version = minecraft_version.split(" ")
+
+                        self.dependencies = [dependency for dependency in (config_json.get("depends") or []) if dependency not in ["minecraft", "fabricloader", "fabric"]]
+
+                        mod_icon_path = config_json.get("icon")
+                        if mod_icon_path is not None:
+                            with zf.open(mod_icon_path) as f:
+                                self.icon = Image.open(BytesIO(f.read()))
+                except:
+                    pass
+                
+            if "mcmod.info" in zf.namelist():
                 self.client_type = ModType.FORGE
 
-            if self.client_type == ModType.FORGE:
-                with zf.open("mcmod.info") as f:
-                    config_json = json.load(f)[0]
+                try:
+                    with zf.open("mcmod.info") as f:
+                        config_json = json.load(f)[0]
 
-                    self.id = config_json["modid"]
-                    self.mod_name = config_json["name"]
-                    self.description = config_json["description"]
-                    self.version = config_json["version"]
-                    self.minecraft_version = [config_json["mcversion"]]
-                    self.dependencies = config_json.get("requiredMods") or []
+                        self.id = config_json.get("modid")
+                        self.mod_name = config_json.get("name")
+                        self.description = config_json.get("description")
+                        self.version = config_json.get("version")
+                        self.minecraft_version = [config_json.get("mcversion")]
+                        self.dependencies = config_json.get("requiredMods") or []
 
-                    mod_icon_path = config_json.get("logoFile")
-                    if mod_icon_path is not None and mod_icon_path != "":
-                        with zf.open(mod_icon_path) as f:
-                            self.icon = Image.open(f)
-
-
-            elif self.client_type == ModType.FABRIC:
-                with zf.open("fabric.mod.json") as f:
-                    config_json = json.load(f)
-
-                    self.id = config_json["id"]
-                    self.mod_name = config_json["name"]
-                    self.description = config_json["description"]
-                    self.version = config_json["version"]
-
-                    minecraft_version = config_json["depends"].get("minecraft")
-                    if minecraft_version is None: self.minecraft_version = ["*"]
-                    elif isinstance(minecraft_version, list): self.minecraft_version = minecraft_version
-                    else: self.minecraft_version = minecraft_version.split(" ")
-
-                    self.dependencies = [dependency for dependency in config_json["depends"] if dependency not in ["minecraft", "fabricloader", "fabric"]]
-
-                    mod_icon_path = config_json.get("icon")
-                    if mod_icon_path is not None:
-                        with zf.open(mod_icon_path) as f:
-                            self.icon = Image.open(BytesIO(f.read()))
+                        mod_icon_path = config_json.get("logoFile")
+                        if mod_icon_path is not None and mod_icon_path != "":
+                            with zf.open(mod_icon_path) as f:
+                                self.icon = Image.open(f)
+                except:
+                    pass
     
     def compatible_with(self, minecraft_version: str) -> bool:
         to_numeric = lambda version: int("".join([version.zfill(3) for version in version.split(".")]))

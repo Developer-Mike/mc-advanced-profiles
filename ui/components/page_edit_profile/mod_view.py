@@ -30,7 +30,7 @@ class ModView(ctk.CTkFrame):
         lb_name = ThemedLabel(fv_name, text=mod.mod_name, font_size=20, bold=True)
         lb_name.pack(side=tk.LEFT, anchor="nw")
 
-        lb_mc_version = ThemedLabel(fv_name, text=f"({', '.join(mod.minecraft_version)} - {mod.client_type})", font_size=15, text_color="#aaaaaa")
+        lb_mc_version = ThemedLabel(fv_name, text=f"(v{mod.version} - Minecraft {mod.minecraft_version})", font_size=15, text_color="#aaaaaa")
         lb_mc_version.pack(side=tk.LEFT, anchor="w", padx=10)
 
         lb_mod_description = ThemedLabel(fv_content, text=mod.description[:100] + "\n" + mod.description[100:200], font_size=15, text_color="#aaaaaa")
