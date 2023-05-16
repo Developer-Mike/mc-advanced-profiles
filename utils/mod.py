@@ -27,8 +27,8 @@ class Mod:
                         config_json = json.load(f)
 
                         self.id = config_json.get("id")
-                        self.mod_name = config_json.get("name")
-                        self.description = config_json.get("description")
+                        self.mod_name = config_json["name"]
+                        self.description = config_json["description"]
                         self.version = config_json.get("version")
 
                         minecraft_version = (config_json.get("depends") or {}).get("minecraft")
@@ -44,7 +44,7 @@ class Mod:
                                 self.icon = Image.open(BytesIO(f.read()))
                 except:
                     pass
-                
+
             if "mcmod.info" in zf.namelist():
                 self.client_type = ModType.FORGE
 
@@ -53,8 +53,8 @@ class Mod:
                         config_json = json.load(f)[0]
 
                         self.id = config_json.get("modid")
-                        self.mod_name = config_json.get("name")
-                        self.description = config_json.get("description")
+                        self.mod_name = config_json["name"]
+                        self.description = config_json["description"]
                         self.version = config_json.get("version")
                         self.minecraft_version = [config_json.get("mcversion")]
                         self.dependencies = config_json.get("requiredMods") or []
