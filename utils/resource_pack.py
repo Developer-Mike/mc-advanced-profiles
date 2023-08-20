@@ -23,7 +23,7 @@ class ResourcePack:
 
             try:
                 with zf.open("pack.png") as f:
-                    self.icon = Image.open(f)
+                    self.icon = Image.open(f).copy()
             except:
                 pass
 

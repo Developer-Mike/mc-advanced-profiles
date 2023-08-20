@@ -41,7 +41,7 @@ class Mod:
                         mod_icon_path = config_json.get("icon")
                         if mod_icon_path is not None:
                             with zf.open(mod_icon_path) as f:
-                                self.icon = Image.open(BytesIO(f.read()))
+                                self.icon = Image.open(BytesIO(f.read())).convert("RGBA")
                 except:
                     pass
 

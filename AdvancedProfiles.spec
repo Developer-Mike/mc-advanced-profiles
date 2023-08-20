@@ -6,7 +6,7 @@ main = Analysis(
     pathex=[],
     binaries=[],
     datas=[
-        ("d:/programme/wpy64-3830/python-3.8.3.amd64/lib/site-packages/customtkinter", "customtkinter/"), # Change this to your customtkinter path
+        ("C:/Users/delta/AppData/Local/Programs/Python/Python311/Lib/site-packages/customtkinter", "customtkinter/"), # Change this to your customtkinter path
         ("assets", "assets/")
     ],
     hiddenimports=[],
